@@ -14,7 +14,7 @@ function get_actual_url() {
 
 function parseUrlQuery ($url) {
   $valid_queries = ['page'];
-
+  
   $return = [
     'query'=>[
       'other'=>[
@@ -29,40 +29,27 @@ function parseUrlQuery ($url) {
 
   if (!empty($parseUrl['query'])) {
 
-    $explUrlQuery = explode('&', $parseUrl['query']);   
-    foreach ($explUrlQuery as $ek => $eVal) {
-        $tmp = explode('=',$eVal);
+    parse_str($parseUrl['query'],$parseUrlQuery);    
 
-        if (count($tmp)==2) {
+    // Новый мегаалгоритм разбора URL query. Встревчайте))
+    // Вот он какой зверь во всем своем величии.. 
+    $posCounter = 0;
+    foreach ($parseUrlQuery as $sectionKey => $sectionValue) {          
+      $posCounter++;
 
-          $return['query'][$tmp[0]] = $tmp[1];
-        
-          if (!in_array($tmp[0], $valid_queries)) {                   
-            $return['query']['other']['query'] .='&'.$eVal;
-            $return['query']['other']['count']++;
+      $return['query'][$sectionKey] = $sectionValue;
 
-          }
-
-          if (in_array($tmp[0], $valid_queries)) {
-            switch ($tmp[0]) {             
-              case 'page':
-                $return['positions']['page'] = $ek+1;
-                break;                  
-            } 
-          }
-
-        } /*else {
-          $return['query']['section'] = 'admin-panel';          
-          $return['query']['page'] = '404';         
-          $return['positions']['section'] = '1';          
-          $return['positions']['page'] = '2';         
-        }*/
-                
-
+      if (!in_array($sectionKey, $valid_queries)) {
+        $return['query']['other']['query'] .= 
+          '&' . $sectionKey . '=' . $sectionValue;
+        $return['query']['other']['count']++;
+      } else {
+        $return['positions'][$sectionKey] = $posCounter;
       }
 
-  }
+    }
 
+  }
 
   return $return;
 }
