@@ -1,0 +1,23 @@
+.order__form  {
+  position: relative;
+}
+
+.order__form .orderAJAXResponce {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #fff;
+
+  display: none;
+}
+.order__form .orderAJAXResponce .status-popup__inner {
+  height: 100%; 
+  position: relative;
+}
+.order__form .orderAJAXResponce .close_btn {
+  position: absolute;
+  top: 9px; right: 18px;
+  font-size: 120%;
+  cursor: pointer;
+  color: #666;
+}
